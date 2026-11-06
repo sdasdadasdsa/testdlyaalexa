@@ -131,7 +131,17 @@
     @media(max-width:380px) { .hero h1 { font-size:42px; }.preview-card { padding:16px; }.question-title { font-size:23px; }.result-actions .button { width:100%; } }
     @media(prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto !important; transition:none !important; } }
     @media print { body { background:white;color:#111; }.container { width:100%; }.result-hero,.result-card { background:#fff;border:1px solid #ccc; }.result-hero p,.result-help,.score-ends,.axis-caption,.axis-vertical { color:#555 !important; }.result-actions,header,footer,.result-details,.footnote { display:none !important; } .result-grid { grid-template-columns:1fr 1fr; }.result-card h2,.score-head strong,.score-head b { color:#111; }.score-rail { -webkit-print-color-adjust:exact;print-color-adjust:exact; } }
-  </style>
+  
+/* POLYUS_RANDOM_SCREAM_V2 */
+.scare-overlay{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:10px;background:radial-gradient(ellipse at center,#ff274a 0%,#89051e 60%,#1a0010 100%);color:#fff;text-align:center;}
+.scare-overlay.hidden{display:none!important}
+.scare-overlay:not(.hidden){animation:scare-impact .6s both}
+.scare-face{font-size:clamp(105px,27vw,280px);line-height:1;filter:drop-shadow(0 16px 25px #32000c)}
+.scare-words{font-size:clamp(38px,10vw,108px);font-weight:1000;letter-spacing:-.06em;text-shadow:0 7px 0 #30000e,0 18px 32px #31000c}
+@keyframes scare-impact{0%{transform:scale(1.45) rotate(-3deg)}35%{transform:scale(.97) rotate(2deg)}72%{transform:scale(1.07) rotate(-1deg)}100%{transform:scale(1) rotate(0)}}
+@media(prefers-reduced-motion:reduce){.scare-overlay:not(.hidden){animation:none}}
+
+</style>
 </head>
 <body>
 <div class="container">
@@ -285,6 +295,82 @@ $('downloadBtn').addEventListener('click',()=>{const blob=new Blob([getReport().
 document.addEventListener('keydown',e=>{if(screen!=='quiz'||e.altKey||e.ctrlKey||e.metaKey||e.target.closest('input,textarea'))return;if(/^[1-5]$/.test(e.key)){choose(answerOptions[Number(e.key)-1].v);}else if(e.key==='Enter'){e.preventDefault();next();}else if(e.key==='ArrowLeft'&&e.target.tagName!=='BUTTON'){back();}});
 // initialize
 if(finished)renderResults();else renderStart();
+</script>
+<div id="scareOverlay" class="scare-overlay hidden" aria-hidden="true"><div class="scare-face">😱</div><div class="scare-words">ААААААААА!!!</div></div>
+<script>
+
+(()=>{
+"use strict";
+const STORE="polyus_jump_scare_once_v2";
+const questionEl=document.getElementById("questionNumber");
+const quizEl=document.getElementById("quizScreen");
+const overlay=document.getElementById("scareOverlay");
+if(!questionEl||!quizEl||!overlay)return;
+const pick=(min=8)=>Math.floor(Math.random()*(50-min))+min;
+const current=()=>parseInt(questionEl.textContent,10)||1;
+let saved={};try{saved=JSON.parse(localStorage.getItem(STORE)||"{}")||{}}catch(e){}
+let target=(Number.isInteger(saved.target)&&saved.target>=8&&saved.target<=49)?saved.target:pick(Math.min(49,Math.max(8,current()+2)));
+let fired=saved.fired===true;
+const save=()=>{try{localStorage.setItem(STORE,JSON.stringify({target,fired}))}catch(e){}};
+save();
+const sound=new Audio("https://upload.wikimedia.org/wikipedia/commons/d/d9/Wilhelm_Scream.ogg");
+sound.preload="auto";sound.volume=1.0;
+function fallbackSound(){
+ const Context=window.AudioContext||window.webkitAudioContext;
+ if(!Context)return;
+ try{
+   const ctx=new Context(),t=ctx.currentTime,d=1.7,out=ctx.createGain();
+   out.gain.setValueAtTime(.001,t);
+   out.gain.exponentialRampToValueAtTime(.8,t+.025);
+   out.gain.setValueAtTime(.8,t+d-.15);
+   out.gain.exponentialRampToValueAtTime(.001,t+d);
+   out.connect(ctx.destination);
+   [0,1,2].forEach(n=>{
+     const osc=ctx.createOscillator(),amp=ctx.createGain();
+     osc.type=n===1?"square":"sawtooth";
+     osc.frequency.setValueAtTime([570,720,920][n],t);
+     osc.frequency.exponentialRampToValueAtTime([1160,1460,1910][n],t+.16);
+     osc.frequency.exponentialRampToValueAtTime([370,480,680][n],t+d);
+     amp.gain.value=[.16,.08,.05][n];
+     osc.connect(amp).connect(out);osc.start(t);osc.stop(t+d);
+   });
+   const buffer=ctx.createBuffer(1,Math.ceil(ctx.sampleRate*d),ctx.sampleRate),a=buffer.getChannelData(0);
+   for(let i=0;i<a.length;i++)a[i]=Math.random()*2-1;
+   const noise=ctx.createBufferSource(),band=ctx.createBiquadFilter(),amp=ctx.createGain();
+   noise.buffer=buffer;band.type="bandpass";band.frequency.value=1450;band.Q.value=.7;amp.gain.value=.15;
+   noise.connect(band).connect(amp).connect(out);noise.start(t);noise.stop(t+d);
+   setTimeout(()=>ctx.close().catch(()=>{}),2500);
+ }catch(e){}
+}
+let hideTimer=0;
+function trigger(){
+ if(fired)return;
+ fired=true;save();
+ overlay.classList.remove("hidden");
+ overlay.setAttribute("aria-hidden","false");
+ clearTimeout(hideTimer);
+ hideTimer=setTimeout(()=>{overlay.classList.add("hidden");overlay.setAttribute("aria-hidden","true")},1950);
+ try{
+   if(sound.readyState>=2){
+     sound.currentTime=0;
+     const p=sound.play();
+     if(p)p.catch(fallbackSound);
+   }else fallbackSound();
+ }catch(e){fallbackSound()}
+}
+function check(){
+ if(!fired&&!quizEl.classList.contains("hidden")&&current()===target)trigger();
+}
+function reset(){target=pick();fired=false;save()}
+document.addEventListener("click",e=>{
+ if(e.target.closest("#newStartBtn,#restartBtn")){reset();return}
+ check();
+});
+document.addEventListener("keydown",e=>{
+ if(["Enter","1","2","3","4","5","ArrowLeft"].includes(e.key))check();
+});
+})();
+
 </script>
 </body>
 </html>
