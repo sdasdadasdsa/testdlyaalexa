@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#090d19">
+  <meta name="description" content="Интерактивный политический тест на 50 вопросов: экономика, общественные ценности, личные свободы, государство и международная политика.">
+  <title>ПОЛЮС — Карта политических взглядов</title>
+  <style>
+    :root { --bg:#090d19; --panel:#12192b; --panel2:#182137; --line:rgba(194,209,241,.13); --ink:#f4f6fc; --muted:#a0aac2; --subtle:#69758f; --purple:#9c85ff; --cyan:#6ce4e0; --yellow:#ffce84; --pink:#ff8cbd; --green:#9de6ae; --radius:24px; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; min-height:100vh; color:var(--ink); background:radial-gradient(ellipse 65% 50% at 80% -15%, #211c48 0%, transparent 65%),radial-gradient(ellipse 35% 45% at -15% 70%,#102e38 0%,transparent 76%),var(--bg); font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif; -webkit-font-smoothing:antialiased; }
+    body::before { content:""; position:fixed; inset:0; pointer-events:none; background-image:radial-gradient(rgba(255,255,255,.10) .7px,transparent .8px); background-size:24px 24px; opacity:.13; z-index:0; }
+    button { font:inherit; cursor:pointer; }
+    button:focus-visible,a:focus-visible { outline:3px solid var(--cyan); outline-offset:4px; }
+    .container { width:min(1150px,calc(100% - 48px)); margin:0 auto; position:relative; z-index:1; }
+    header { height:90px; display:flex; align-items:center; justify-content:space-between; gap:18px; border-bottom:1px solid var(--line); }
+    .brand { display:inline-flex; align-items:center; gap:12px; text-decoration:none; color:var(--ink); font-size:20px; font-weight:850; letter-spacing:.13em; }
+    .logo { width:36px; height:36px; position:relative; border:1px solid rgba(156,133,255,.55); border-radius:12px; display:grid; place-items:center; transform:rotate(-8deg); background:linear-gradient(135deg,rgba(156,133,255,.16),rgba(108,228,224,.07)); }
+    .logo::before,.logo::after { content:""; position:absolute; border-radius:50%; }
+    .logo::before { width:20px; height:20px; border:3px solid var(--purple); }
+    .logo::after { width:6px; height:6px; background:var(--cyan); transform:translate(10px,-11px); box-shadow:0 0 12px var(--cyan); }
+    .head-info { color:var(--muted); font-size:12px; letter-spacing:.06em; font-weight:650; }
+    .head-info span { color:#6f7b97; margin:0 10px; }
+    main { padding-bottom:56px; }
+    .hidden { display:none !important; }
+    .eyebrow { color:var(--cyan); font-weight:750; letter-spacing:.16em; text-transform:uppercase; font-size:11px; }
+    h1,h2,h3,p { margin-top:0; }
+    .hero { display:grid; grid-template-columns:minmax(0,1.04fr) minmax(350px,.96fr); gap:48px; align-items:center; padding:93px 0 100px; min-height:650px; }
+    .hero .eyebrow { display:flex; align-items:center; gap:10px; margin-bottom:25px; }
+    .tiny-line { display:inline-block; width:28px; height:1px; background:var(--cyan); }
+    h1 { font-size:clamp(46px,6.2vw,80px); letter-spacing:-.068em; line-height:1.04; font-weight:840; margin-bottom:25px; }
+    .gradient-text { background:linear-gradient(105deg,var(--purple),#c4aaff 53%,var(--cyan)); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+    .lead { color:var(--muted); line-height:1.78; max-width:510px; font-size:16px; margin-bottom:34px; }
+    .hero-actions { display:flex; align-items:center; flex-wrap:wrap; gap:15px; }
+    .button { display:inline-flex; align-items:center; justify-content:center; gap:10px; border:0; border-radius:13px; font-weight:750; font-size:14px; white-space:nowrap; padding:17px 22px; min-height:52px; transition:transform .15s, background .15s, box-shadow .15s, opacity .15s; }
+    .button:hover:not(:disabled) { transform:translateY(-2px); }
+    .button:active:not(:disabled) { transform:translateY(0); }
+    .button:disabled { opacity:.36; cursor:not-allowed; }
+    .button-primary { color:#0a0d18; background:linear-gradient(115deg,#baa6ff,#91e8e2); box-shadow:0 12px 28px rgba(151,136,255,.17); }
+    .button-primary:hover:not(:disabled) { box-shadow:0 15px 36px rgba(151,136,255,.28); }
+    .button-muted { background:#1c263b; color:var(--ink); border:1px solid var(--line); }
+    .button-ghost { background:transparent; border:1px solid var(--line); color:#dbe2f3; }
+    .button svg { width:18px; height:18px; flex-shrink:0; }
+    .microtext { color:var(--subtle); font-size:12px; line-height:1.6; margin-top:21px; }
+    .stats-row { display:flex; gap:10px; flex-wrap:wrap; margin-top:43px; }
+    .pill { border:1px solid var(--line); background:rgba(18,25,43,.58); border-radius:100px; padding:10px 13px; font-size:12px; color:#c7cee0; }
+    .pill b { color:white; font-size:13px; }
+    .preview-card { position:relative; background:linear-gradient(153deg,#1d2340,#12192b 63%,#0e1729); border:1px solid rgba(169,166,249,.23); padding:29px; border-radius:29px; box-shadow:0 30px 100px rgba(0,0,0,.24); transform:rotate(2deg); }
+    .preview-card::before { content:""; position:absolute; inset:-14px; z-index:-1; border:1px solid rgba(156,133,255,.09); border-radius:35px; transform:rotate(-5deg); }
+    .card-head { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:24px; }
+    .mini-tag { border-radius:100px; background:rgba(156,133,255,.12); border:1px solid rgba(156,133,255,.22); color:#c7b9ff; padding:8px 10px; font-weight:750; font-size:10px; letter-spacing:.09em; }
+    .preview-card h3 { font-size:19px; letter-spacing:-.03em; margin-bottom:0; }
+    .preview-map { width:100%; aspect-ratio:1.17; border:1px solid var(--line); border-radius:14px; position:relative; overflow:hidden; background:linear-gradient(90deg,transparent calc(50% - .5px),rgba(203,214,250,.23) 50%,transparent calc(50% + .5px)),linear-gradient(0deg,transparent calc(50% - .5px),rgba(203,214,250,.23) 50%,transparent calc(50% + .5px)),repeating-linear-gradient(0deg,transparent 0,transparent calc(25% - 1px),rgba(203,214,250,.05) 25%),repeating-linear-gradient(90deg,transparent 0,transparent calc(25% - 1px),rgba(203,214,250,.05) 25%),#11192c; }
+    .map-label { position:absolute; font-size:9px; color:#77819b; letter-spacing:.035em; }
+    .map-label.tl { left:12px;top:12px; }.map-label.tr { right:12px;top:12px;text-align:right; }.map-label.bl { bottom:12px;left:12px; }.map-label.br { bottom:12px;right:12px;text-align:right; }
+    .map-dot { position:absolute; width:18px; height:18px; border-radius:50%; left:57%; top:37%; background:var(--cyan); transform:translate(-50%,-50%); box-shadow:0 0 0 10px rgba(108,228,224,.11),0 0 35px rgba(108,228,224,.4); }
+    .preview-bars { margin-top:20px; display:grid; gap:15px; }
+    .preview-bar-label { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:7px; font-size:11px; color:#b8c1d4; }
+    .preview-bar-track { height:5px; border-radius:100px; background:#303850; overflow:hidden; }
+    .preview-bar-fill { height:100%; border-radius:100px; background:linear-gradient(90deg,var(--purple),var(--cyan)); }
+    .section-title { font-size:28px; letter-spacing:-.045em; margin-bottom:20px; }
+    .feature-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; padding-bottom:70px; }
+    .feature { border:1px solid var(--line); background:rgba(18,25,43,.58); padding:24px; border-radius:18px; }
+    .feature-icon { font-size:22px; color:var(--purple); margin-bottom:13px; }
+    .feature h3 { font-size:14px; margin-bottom:9px; }.feature p { font-size:12px; line-height:1.65; color:var(--muted); margin:0; }
+    .quiz-layout { display:grid; grid-template-columns:300px minmax(0,1fr); gap:20px; padding:56px 0 76px; align-items:start; }
+    .sidebar,.question-card,.result-hero,.result-card,.result-details { background:linear-gradient(147deg,rgba(24,33,55,.97),rgba(16,23,40,.96)); border:1px solid var(--line); border-radius:24px; }
+    .sidebar { padding:29px 25px; position:sticky; top:20px; }
+    .sidebar-title { font-size:13px; font-weight:750; color:#ebeffb; }
+    .circle-progress { width:154px; height:154px; display:grid; place-items:center; margin:27px auto; border-radius:50%; background:conic-gradient(var(--purple) 0%,rgba(135,147,178,.17) 0%); transition:background .2s; }
+    .circle-core { background:#171e32; border:10px solid #171e32; width:132px; height:132px; border-radius:50%; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+    .circle-core strong { font-size:40px; letter-spacing:-.06em; }.circle-core span { font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:.12em; }
+    .side-sep { height:1px; background:var(--line); margin:24px 0; }
+    .side-caption { text-transform:uppercase; letter-spacing:.14em; font-weight:750; color:var(--subtle); font-size:10px; margin-bottom:19px; }
+    .section-item { display:flex; align-items:center; gap:11px; margin-bottom:16px; font-size:12px; color:var(--muted); }
+    .section-item:last-child { margin-bottom:0; }
+    .section-item.current { color:var(--ink); font-weight:750; }
+    .section-circle { width:25px; height:25px; flex-shrink:0; border-radius:9px; background:#26314b; border:1px solid var(--line); display:grid; place-items:center; font-size:10px; font-weight:800; }
+    .section-item.done .section-circle { background:rgba(108,228,224,.12); color:var(--cyan); border-color:rgba(108,228,224,.28); }
+    .section-item.current .section-circle { color:#0b1120; background:var(--purple); }
+    .question-card { padding:clamp(26px,4.5vw,53px); min-height:630px; }
+    .question-top { display:flex; justify-content:space-between; gap:15px; align-items:center; margin-bottom:36px; }
+    .question-no { font-size:12px; letter-spacing:.12em; font-weight:800; color:var(--muted); }
+    .question-no strong { color:var(--cyan); }
+    .key-hint { font-size:11px; color:var(--subtle); }
+    .section-kicker { color:var(--purple); text-transform:uppercase; letter-spacing:.12em; font-size:11px; font-weight:800; margin-bottom:13px; }
+    .question-title { font-size:clamp(24px,3.4vw,36px); line-height:1.27; letter-spacing:-.042em; max-width:680px; font-weight:780; margin-bottom:28px; min-height:93px; }
+    .options { display:grid; gap:11px; }
+    .answer-option { width:100%; border:1px solid var(--line); color:#dde4f3; padding:14px 18px; border-radius:13px; background:#171f34; display:flex; align-items:center; gap:14px; text-align:left; min-height:64px; transition:background .16s,border-color .16s,transform .16s; }
+    .answer-option:hover { background:#202a43; border-color:rgba(173,157,254,.52); }
+    .answer-option[aria-pressed="true"] { border-color:var(--purple); background:linear-gradient(90deg,rgba(156,133,255,.20),rgba(156,133,255,.07)); }
+    .answer-n { display:grid; place-items:center; width:33px; height:33px; border-radius:9px; color:#a7b2ca; background:#253047; border:1px solid rgba(204,218,244,.12); font-size:12px; font-weight:750; flex-shrink:0; }
+    .answer-option[aria-pressed="true"] .answer-n { background:var(--purple); color:#0c1220; }
+    .answer-text { font-size:14px; font-weight:600; line-height:1.4; flex:1; }
+    .radio-dot { border:1.5px solid #667491; border-radius:50%; width:17px; height:17px; flex-shrink:0; }
+    .answer-option[aria-pressed="true"] .radio-dot { border:5px solid var(--purple); background:#1c2340; }
+    .quiz-nav { display:flex; gap:10px; align-items:center; justify-content:space-between; margin-top:36px; padding-top:26px; border-top:1px solid var(--line); }
+    .quiz-nav .button { min-width:115px; }
+    .privacy { display:flex; align-items:center; gap:8px; color:var(--subtle); font-size:11px; line-height:1.5; margin-top:23px; }
+    .privacy svg { height:16px; width:16px; flex-shrink:0; }
+    .result-wrap { padding:58px 0 88px; }
+    .result-hero { padding:clamp(27px,5vw,52px); margin-bottom:18px; display:flex; flex-direction:column; align-items:flex-start; position:relative; overflow:hidden; }
+    .result-hero::after { content:""; width:320px; height:320px; border-radius:50%; border:1px solid rgba(156,133,255,.27); box-shadow:0 0 0 40px rgba(156,133,255,.045),0 0 0 85px rgba(156,133,255,.035),0 0 0 130px rgba(156,133,255,.025); position:absolute; top:-155px; right:-85px; pointer-events:none; }
+    .result-hero h1 { font-size:clamp(33px,4vw,54px); margin-top:13px; margin-bottom:13px; position:relative; z-index:1; }
+    .result-hero p { color:var(--muted); line-height:1.65; max-width:800px; margin:0; position:relative; z-index:1; }
+    .result-grid { display:grid; grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr); gap:18px; margin-top:18px; }
+    .result-card { padding:30px; }
+    .result-card h2 { font-size:20px; letter-spacing:-.035em; margin-bottom:6px; }
+    .result-help { font-size:12px; color:var(--muted); line-height:1.65; margin-bottom:25px; }
+    .compass { width:100%; aspect-ratio:1.25; border-radius:15px; border:1px solid rgba(206,215,246,.16); background:linear-gradient(90deg,transparent calc(50% - 1px),rgba(220,226,255,.35) 50%,transparent calc(50% + 1px)),linear-gradient(0deg,transparent calc(50% - 1px),rgba(220,226,255,.35) 50%,transparent calc(50% + 1px)),repeating-linear-gradient(90deg,transparent 0,transparent calc(25% - 1px),rgba(200,219,246,.05) 25%),repeating-linear-gradient(0deg,transparent 0,transparent calc(25% - 1px),rgba(200,219,246,.05) 25%),#131c30; position:relative; }
+    .compass .quadrant { position:absolute; color:#7d89a4; font-size:10px; line-height:1.4; max-width:90px; }.compass .qtl { top:13px;left:13px; }.compass .qtr { top:13px;right:13px;text-align:right; }.compass .qbl { bottom:13px;left:13px; }.compass .qbr { bottom:13px;right:13px;text-align:right; }
+    .cross-dot { position:absolute; width:21px; height:21px; background:var(--cyan); border:4px solid #c5fffc; box-shadow:0 0 0 11px rgba(108,228,224,.11),0 0 29px rgba(108,228,224,.42); border-radius:50%; transform:translate(-50%,-50%); transition:left .6s,top .6s; z-index:2; }
+    .axis-caption { display:flex; justify-content:space-between; gap:10px; font-size:11px; color:var(--subtle); margin-top:10px; }
+    .axis-vertical { color:var(--subtle); font-size:11px; margin-top:12px; }
+    .score-list { display:grid; gap:24px; }.score-head { display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:11px; }.score-head strong { font-size:13px; }.score-head b { font-size:18px; color:var(--ink); }.score-head b span { color:var(--subtle); font-size:11px; font-weight:500; }
+    .score-rail { position:relative; width:100%; height:9px; border-radius:99px; background:linear-gradient(90deg,#8670ed,#657bba 48%,#6ce4e0 100%); }
+    .score-rail::after { content:""; height:15px; width:2px; background:rgba(255,255,255,.4); position:absolute; top:-3px; left:50%; }
+    .score-marker { position:absolute; top:50%; width:19px; height:19px; border-radius:50%; background:white; border:4px solid #182137; box-shadow:0 0 0 1px rgba(255,255,255,.8); transform:translate(-50%,-50%); z-index:2; }
+    .score-ends { display:flex; justify-content:space-between; gap:10px; color:var(--muted); font-size:10px; margin-top:9px; line-height:1.45; }.score-ends span { max-width:46%; }.score-ends span:last-child { text-align:right; }
+    .result-details { margin-top:18px; padding:26px 30px; }
+    .result-details summary { cursor:pointer; font-weight:750; font-size:15px; }.result-details summary::marker { color:var(--purple); }
+    .detail-list { margin-top:21px; display:grid; gap:10px; }.detail-item { display:grid; grid-template-columns:30px 1fr; gap:10px; font-size:12px; line-height:1.6; padding-bottom:12px; border-bottom:1px solid var(--line); }.detail-item .di-num { color:var(--cyan); font-weight:800; }.detail-item .di-answer { color:var(--purple); margin-top:4px; }
+    .result-actions { display:flex; align-items:center; flex-wrap:wrap; gap:11px; margin-top:22px; }
+    .footnote { color:var(--subtle); font-size:11px; line-height:1.7; margin-top:26px; max-width:850px; }
+    footer { position:relative; z-index:1; padding:20px 0 30px; border-top:1px solid var(--line); display:flex; justify-content:space-between; gap:15px; color:#6c7890; font-size:11px; line-height:1.5; }
+    .toast { position:fixed; z-index:25; left:50%; bottom:25px; transform:translateX(-50%); color:#101827; background:#d9fff7; border:1px solid rgba(18,26,45,.1); border-radius:13px; padding:13px 20px; font-size:13px; font-weight:700; box-shadow:0 12px 34px rgba(0,0,0,.28); }
+    @media(max-width:950px) { .hero { gap:22px; grid-template-columns:1fr 1fr; }.preview-card { padding:23px; }.quiz-layout { grid-template-columns:240px minmax(0,1fr); }.sidebar { padding:24px 18px; }.result-card { padding:24px; } }
+    @media(max-width:720px) { .container { width:min(100% - 32px,1150px); }header { height:72px; }.head-info { display:none; }.hero { grid-template-columns:1fr; padding:55px 0 65px; gap:52px; min-height:0; }.hero h1 { font-size:clamp(44px,11.4vw,65px); }.preview-card { width:min(100% - 20px,460px); margin:auto; transform:rotate(1deg); }.feature-grid { grid-template-columns:1fr; }.feature { padding:19px 22px; }.feature .feature-icon { margin-bottom:7px; }.stats-row { margin-top:33px; }.quiz-layout { display:flex; flex-direction:column; gap:15px; padding:20px 0 52px; }.sidebar { position:static; width:100%; display:grid; grid-template-columns:1fr auto; align-items:center; padding:15px 20px; gap:6px; border-radius:17px; }.sidebar-title { font-size:12px; }.circle-progress { width:64px; height:64px; margin:0; grid-row:span 2; grid-column:2; }.circle-core { width:53px; height:53px; border-width:5px; }.circle-core strong { font-size:18px; }.circle-core span { font-size:7px; }.side-sep,.side-caption,.section-list { display:none; }.sidebar .mobile-topic { color:var(--muted); font-size:11px; line-height:1.5; }.question-card { min-height:0; padding:26px 19px 23px; border-radius:17px; width:100%; }.question-top { margin-bottom:27px; }.key-hint { display:none; }.question-title { font-size:26px; min-height:0; margin-bottom:26px; }.answer-option { min-height:61px; padding:12px; gap:11px; }.answer-n { height:31px; width:31px; }.answer-text { font-size:13px; }.quiz-nav .button { padding:14px 17px; min-width:101px; font-size:13px; }.result-wrap { padding:21px 0 58px; }.result-grid { grid-template-columns:1fr; }.result-hero { border-radius:17px; }.result-card,.result-details { border-radius:17px; }.result-details { padding:24px; }footer { flex-direction:column; gap:5px; }.result-actions .button { flex:1; }.microtext { margin-top:15px; } }
+    @media(max-width:380px) { .hero h1 { font-size:42px; }.preview-card { padding:16px; }.question-title { font-size:23px; }.result-actions .button { width:100%; } }
+    @media(prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto !important; transition:none !important; } }
+    @media print { body { background:white;color:#111; }.container { width:100%; }.result-hero,.result-card { background:#fff;border:1px solid #ccc; }.result-hero p,.result-help,.score-ends,.axis-caption,.axis-vertical { color:#555 !important; }.result-actions,header,footer,.result-details,.footnote { display:none !important; } .result-grid { grid-template-columns:1fr 1fr; }.result-card h2,.score-head strong,.score-head b { color:#111; }.score-rail { -webkit-print-color-adjust:exact;print-color-adjust:exact; } }
+  </style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <a class="brand" href="#" id="logoLink" aria-label="На главную"><span class="logo" aria-hidden="true"></span>ПОЛЮС</a>
+    <div class="head-info">ПОЛИТИЧЕСКИЙ ПРОФИЛЬ <span>·</span> 50 ВОПРОСОВ <span>·</span> 5 ШКАЛ</div>
+  </header>
+  <main>
+    <section id="startScreen">
+      <div class="hero">
+        <div>
+          <div class="eyebrow"><span class="tiny-line"></span> ИНТЕРАКТИВНЫЙ ТЕСТ</div>
+          <h1>Где ты на <span class="gradient-text">политической карте?</span></h1>
+          <p class="lead">Левый или правый? Либерал или консерватор? Твои взгляды могут сочетать разные идеи. Ответь на 50 вопросов и посмотри, как они распределяются по пяти направлениям.</p>
+          <div class="hero-actions"><button id="startBtn" type="button" class="button button-primary">Начать тест <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-6-6 6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button id="newStartBtn" class="button button-ghost hidden" type="button">Начать заново</button></div>
+          <div class="microtext">Без регистрации. Ответы сохраняются только в твоём браузере.</div>
+          <div class="stats-row"><span class="pill"><b>50</b> вопросов</span><span class="pill"><b>5</b> политических шкал</span><span class="pill"><b>1</b> персональный профиль</span></div>
+        </div>
+        <div class="preview-card" aria-label="Предварительный пример карты и шкал">
+          <div class="card-head"><h3>Карта взглядов</h3><span class="mini-tag">ПРИМЕР</span></div>
+          <div class="preview-map"><div class="map-label tl">Прогрессивные<br>+ рынок</div><div class="map-label tr">Прогрессивные<br>+ государство</div><div class="map-label bl">Традиционные<br>+ рынок</div><div class="map-label br">Традиционные<br>+ государство</div><div class="map-dot"></div></div>
+          <div class="preview-bars"><div><div class="preview-bar-label"><span>Экономика</span><span>64 / 100</span></div><div class="preview-bar-track"><div class="preview-bar-fill" style="width:64%"></div></div></div><div><div class="preview-bar-label"><span>Социальные ценности</span><span>71 / 100</span></div><div class="preview-bar-track"><div class="preview-bar-fill" style="width:71%"></div></div></div><div><div class="preview-bar-label"><span>Личные свободы</span><span>57 / 100</span></div><div class="preview-bar-track"><div class="preview-bar-fill" style="width:57%"></div></div></div></div>
+        </div>
+      </div>
+      <h2 class="section-title">Что показывает тест?</h2>
+      <div class="feature-grid"><div class="feature"><div class="feature-icon">↗</div><h3>Общественные ценности</h3><p>Традиции, религия, права человека и социальные изменения.</p></div><div class="feature"><div class="feature-icon">◈</div><h3>Экономический взгляд</h3><p>Рынок, налоги, социальные гарантии и роль государства.</p></div><div class="feature"><div class="feature-icon">◎</div><h3>Свобода и власть</h3><p>Цензура, безопасность, демократия и международные отношения.</p></div></div>
+    </section>
+    <section id="quizScreen" class="hidden">
+      <div class="quiz-layout">
+        <aside class="sidebar"><div class="sidebar-title">Твой прогресс</div><div class="mobile-topic" id="mobileTopic">Общество и традиции</div><div id="circleProgress" class="circle-progress"><div class="circle-core"><strong id="progressNumber">0%</strong><span>пройдено</span></div></div><div class="side-sep"></div><div class="side-caption">Разделы теста</div><div class="section-list" id="sectionList"></div></aside>
+        <div class="question-card"><div class="question-top"><div class="question-no">ВОПРОС <strong id="questionNumber">01</strong> / 50</div><span class="key-hint">Клавиши 1–5 — выбор, Enter — далее</span></div><div class="section-kicker" id="categoryText">ОБЩЕСТВО И ТРАДИЦИИ</div><h2 id="questionText" class="question-title"></h2><div class="options" id="optionList" role="group" aria-label="Выберите один вариант ответа"></div><div class="quiz-nav"><button class="button button-ghost" id="prevBtn" type="button">← Назад</button><button class="button button-primary" id="nextBtn" type="button" disabled>Далее →</button></div><div class="privacy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg> Ответы автоматически сохраняются на этом устройстве. Здесь нет правильных или неправильных ответов.</div></div>
+      </div>
+    </section>
+    <section id="resultsScreen" class="hidden result-wrap"><div class="result-hero"><div class="eyebrow">ТЕСТ ПРОЙДЕН · 50 ИЗ 50</div><h1>Твоя карта <span class="gradient-text">взглядов.</span></h1><p id="resultNarrative"></p></div><div class="result-grid"><div class="result-card"><h2>Две основные оси</h2><p class="result-help">Горизонталь — экономические взгляды. Вертикаль — общественные ценности.</p><div class="compass" id="resultCompass" role="img" aria-label="Карта политических взглядов"><span class="quadrant qtl">Прогрессивные<br>+ рынок</span><span class="quadrant qtr">Прогрессивные<br>+ перераспределение</span><span class="quadrant qbl">Традиционные<br>+ рынок</span><span class="quadrant qbr">Традиционные<br>+ перераспределение</span><div class="cross-dot" id="resultDot"></div></div><div class="axis-caption"><span>← Больше рынка</span><span>Больше перераспределения →</span></div><div class="axis-vertical">↑ Прогрессивные взгляды · ↓ Традиционные взгляды</div></div><div class="result-card"><h2>Пять измерений</h2><p class="result-help">Чем дальше указатель вправо, тем ближе ответы к правому полюсу конкретной шкалы.</p><div class="score-list" id="scoreList"></div></div></div><details class="result-details"><summary>Посмотреть все 50 ответов</summary><div class="detail-list" id="allAnswers"></div></details><div class="result-actions"><button class="button button-primary" id="copyBtn" type="button">Скопировать результат</button><button class="button button-muted" id="downloadBtn" type="button">Скачать результат .txt</button><button class="button button-ghost" id="restartBtn" type="button">Пройти заново</button></div><p class="footnote">Важно: это авторский опрос для саморефлексии, а не научно валидированный политологический тест. Шкалы отражают только ответы на выбранные вопросы; они не определяют твои убеждения, партийную принадлежность или то, за кого тебе следует голосовать.</p></section>
+  </main>
+  <footer><span>© ПОЛЮС · Интерактивная карта взглядов</span><span>Здесь нет «хороших» и «плохих» политических позиций</span></footer>
+</div><div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+<script>
+'use strict';
+const categories = [
+  {id:'soc',title:'Общество и традиции',left:'Традиционные ценности',right:'Прогрессивные ценности'},
+  {id:'eco',title:'Экономика',left:'Рыночный подход',right:'Перераспределение'},
+  {id:'lib',title:'Личные свободы',left:'Контроль ради порядка',right:'Индивидуальные свободы'},
+  {id:'gov',title:'Государственная власть',left:'Централизация',right:'Разделение властей'},
+  {id:'int',title:'Международная политика',left:'Национальный приоритет',right:'Международное сотрудничество'}
+];
+// direction = 1: agreement tends to right side of category's scale; -1: to left side.
+const data = [
+  ['soc', 1, 'Поддерживаешь ли ты возможность медицинских вмешательств для гендерного перехода несовершеннолетних по их желанию без согласия родителей?'],
+  ['soc',-1, 'Следует ли государству особо поддерживать традиционную модель семьи — мужчину, женщину и их детей?'],
+  ['soc', 1, 'Должно ли государство признавать однополые браки наравне с разнополыми?'],
+  ['soc',-1, 'Следует ли запрещать обсуждение ЛГБТ-тем в школьных учебных материалах?'],
+  ['soc', 1, 'Следует ли разрешать совершеннолетним менять юридический гендерный маркер в документах по заявлению?'],
+  ['soc',-1, 'Должны ли религиозные нормы влиять на гражданские законы страны?'],
+  ['soc', 1, 'Должна ли женщина иметь право самостоятельно решать вопрос об аборте на ранних сроках беременности?'],
+  ['soc',-1, 'Следует ли полностью отказаться от школьного сексуального образования, оставив этот вопрос только родителям?'],
+  ['soc', 1, 'Следует ли воспитывать детей без традиционного разделения занятий и профессий на «мужские» и «женские»?'],
+  ['soc',-1, 'Должно ли государство финансировать программы по сохранению традиционных религиозных ценностей?'],
+  ['eco', 1, 'Следует ли значительно повысить налоги для самых богатых ради расширения социальных программ?'],
+  ['eco',-1, 'Следует ли приватизировать большинство государственных предприятий, чтобы сократить участие государства в экономике?'],
+  ['eco', 1, 'Должно ли высшее образование быть бесплатным для студентов за счёт налогов?'],
+  ['eco',-1, 'Следует ли снизить налоги для бизнеса, даже если ради этого придётся сократить часть социальных расходов?'],
+  ['eco', 1, 'Должно ли государство ограничивать цены на основные продукты в периоды экономических кризисов?'],
+  ['eco',-1, 'Нужно ли существенно сократить государственное регулирование крупных частных компаний?'],
+  ['eco', 1, 'Следует ли укреплять профсоюзы и их право договариваться об условиях труда от имени работников?'],
+  ['eco',-1, 'Следует ли передать большинство государственных больниц в частное управление?'],
+  ['eco', 1, 'Должно ли государство гарантировать денежную помощь людям с низкими доходами за счёт бюджета?'],
+  ['eco',-1, 'Следует ли сокращать государственные расходы, даже если некоторые общественные услуги станут платными?'],
+  ['lib', 1, 'Должны ли граждане иметь право проводить мирные митинги без предварительного разрешения властей?'],
+  ['lib',-1, 'Следует ли разрешить государству блокировать целые социальные сети ради борьбы с дезинформацией?'],
+  ['lib', 1, 'Следует ли отменить уголовное наказание за личное употребление каннабиса совершеннолетними?'],
+  ['lib',-1, 'Должны ли все пользователи раскрывать настоящую личность, чтобы публиковать комментарии в интернете?'],
+  ['lib', 1, 'Должно ли быть разрешено резко и публично критиковать политиков, даже когда критика оскорбительна?'],
+  ['lib',-1, 'Должны ли спецслужбы иметь право читать личную переписку граждан без решения суда ради безопасности?'],
+  ['lib', 1, 'Следует ли разрешать гражданам пользоваться шифрованием переписки без обязательного доступа спецслужб?'],
+  ['lib',-1, 'Следует ли запрещать публичные высказывания, которые власти сочтут оскорбительными, даже без призывов к насилию?'],
+  ['lib', 1, 'Следует ли отменить уголовное наказание за добровольное оказание сексуальных услуг между совершеннолетними?'],
+  ['lib',-1, 'Допустимо ли вводить комендантский час при массовых протестах ради поддержания общественного порядка?'],
+  ['gov', 1, 'Должны ли суды оставаться независимыми, даже если они регулярно отменяют решения правительства?'],
+  ['gov',-1, 'Следует ли разрешать популярному президенту оставаться у власти дольше сроков, предусмотренных конституцией?'],
+  ['gov', 1, 'Должна ли избирательная система давать небольшим партиям реальный шанс получить места в парламенте?'],
+  ['gov',-1, 'Следует ли ограничивать деятельность оппозиционных партий ради политической стабильности?'],
+  ['gov', 1, 'Должны ли высокопоставленные чиновники публично раскрывать сведения о доходах и имуществе?'],
+  ['gov',-1, 'Следует ли расширить полномочия силовых ведомств без дополнительного контроля парламента?'],
+  ['gov', 1, 'Должны ли существовать общественные СМИ, финансируемые из бюджета, но независимые от правительства?'],
+  ['gov',-1, 'Должен ли глава государства иметь право долгое время принимать законы без парламента во время кризиса?'],
+  ['gov', 1, 'Следует ли выносить важные конституционные изменения на общенациональные референдумы?'],
+  ['gov',-1, 'Следует ли назначать руководителей регионов центральной властью вместо выборов на местах?'],
+  ['int', 1, 'Следует ли участвовать в международных климатических соглашениях, даже если это потребует дополнительных расходов?'],
+  ['int',-1, 'Нужно ли вводить высокие пошлины на импортные товары ради защиты отечественных производителей?'],
+  ['int', 1, 'Должна ли страна принимать беженцев, спасающихся от войн, в рамках международных обязательств?'],
+  ['int',-1, 'Следует ли ограничивать иммиграцию ради сохранения национальной культуры страны?'],
+  ['int', 1, 'Следует ли стране участвовать в работе международных судов, рассматривающих тяжкие преступления?'],
+  ['int',-1, 'Нужно ли выходить из международных соглашений, если они мешают самостоятельной экономической политике страны?'],
+  ['int', 1, 'Следует ли расширять международные программы учёбы и работы за рубежом?'],
+  ['int',-1, 'Нужно ли защищать национальный рынок от иностранной конкуренции, даже если это повысит цены для покупателей?'],
+  ['int', 1, 'Следует ли странам обмениваться медицинскими данными и ресурсами при международных эпидемиях?'],
+  ['int',-1, 'Должны ли внутренние потребности страны иметь приоритет над зарубежной гуманитарной помощью даже при крупных кризисах?']
+].map(([cat,dir,text],i)=>({id:i+1,cat,dir,text}));
+const answerOptions = [
+  {v:2, t:'Полностью поддерживаю'},
+  {v:1, t:'Скорее поддерживаю'},
+  {v:0, t:'Нейтрально / затрудняюсь ответить'},
+  {v:-1,t:'Скорее не поддерживаю'},
+  {v:-2,t:'Категорически против'}
+];
+const STORE='polyus_political_test_v1';
+const $=id=>document.getElementById(id);
+let saved={}; try { saved=JSON.parse(localStorage.getItem(STORE)||'{}')||{}; } catch(e){}
+let answers=(saved.answers && typeof saved.answers==='object' && !Array.isArray(saved.answers))?saved.answers:{};
+for(const k of Object.keys(answers)){ if(!/^(?:[1-9]|[1-4][0-9]|50)$/.test(k)||![-2,-1,0,1,2].includes(answers[k]))delete answers[k]; }
+let index=Number.isInteger(saved.index)?Math.max(0,Math.min(49,saved.index)):0;
+let finished=saved.finished===true && data.every(q=>answers[q.id]!==undefined);
+let screen='start';
+function persist(){try{localStorage.setItem(STORE,JSON.stringify({answers,index,finished}));}catch(e){}}
+function show(name){screen=name;for(const [n,id] of [['start','startScreen'],['quiz','quizScreen'],['results','resultsScreen']])$(id).classList.toggle('hidden',name!==n);window.scrollTo({top:0,behavior:'instant'});}
+function answered(){return data.filter(q=>answers[q.id]!==undefined).length;}
+function firstMissing(){const pos=data.findIndex(q=>answers[q.id]===undefined);return pos<0?49:pos;}
+function renderStart(){const n=answered();$('startBtn').innerHTML= n===50&&finished?'Посмотреть результаты →':n>0?`Продолжить тест (${n}/50) →`:'Начать тест →';$('newStartBtn').classList.toggle('hidden',n===0);show('start');}
+function renderQuiz(){finished=false;persist();const q=data[index];const cat=categories.find(c=>c.id===q.cat);const n=answered();const pct=Math.round(n/50*100);$('questionNumber').textContent=String(q.id).padStart(2,'0');$('questionText').textContent=q.text;$('categoryText').textContent=cat.title;$('mobileTopic').textContent=cat.title;$('progressNumber').textContent=pct+'%';$('circleProgress').style.background=`conic-gradient(var(--purple) ${pct}%,rgba(135,147,178,.17) ${pct}%)`;
+  $('optionList').replaceChildren(...answerOptions.map((o,i)=>{const b=document.createElement('button');b.type='button';b.className='answer-option';b.setAttribute('aria-pressed',String(answers[q.id]===o.v));b.innerHTML=`<span class="answer-n">${i+1}</span><span class="answer-text"></span><span class="radio-dot" aria-hidden="true"></span>`;b.querySelector('.answer-text').textContent=o.t;b.addEventListener('click',()=>choose(o.v));return b;}));
+  $('prevBtn').disabled=index===0;$('nextBtn').disabled=answers[q.id]===undefined;$('nextBtn').textContent=index===49?'Посмотреть результат →':'Далее →';$('sectionList').replaceChildren(...categories.map((cat,i)=>{const count=data.filter(x=>x.cat===cat.id && answers[x.id]!==undefined).length;const active=cat.id===q.cat;const el=document.createElement('div');el.className='section-item'+(active?' current':'')+(count===10?' done':'');el.innerHTML=`<span class="section-circle">${count===10?'✓':i+1}</span><span>${cat.title}</span>`;return el;}));
+  show('quiz');
+}
+function choose(value){answers[data[index].id]=value;persist();$('optionList').querySelectorAll('.answer-option').forEach((b,i)=>b.setAttribute('aria-pressed',String(answerOptions[i].v===value)));$('nextBtn').disabled=false;const pct=Math.round(answered()/50*100);$('progressNumber').textContent=pct+'%';$('circleProgress').style.background=`conic-gradient(var(--purple) ${pct}%,rgba(135,147,178,.17) ${pct}%)`;}
+function next(){if(answers[data[index].id]===undefined)return;if(index<49){index++;renderQuiz();}else if(answered()===50){finished=true;persist();renderResults();}else{index=firstMissing();renderQuiz();toast('Сначала ответь на пропущенные вопросы');}}
+function back(){if(index>0){index--;renderQuiz();}}
+function compute(){return categories.map(cat=>{const questions=data.filter(q=>q.cat===cat.id);const sum=questions.reduce((s,q)=>s+(answers[q.id]??0)*q.dir,0);return {...cat,score:Math.round(50+sum*50/(2*questions.length))};});}
+function narrative(scores){const get=id=>scores.find(s=>s.id===id).score;const e=get('eco'),s=get('soc'),l=get('lib'),g=get('gov'),w=get('int');let result='';
+  if(e>=62&&s>=62)result='В экономике твои ответы чаще поддерживают перераспределение, а в общественных вопросах — прогрессивные изменения. Такое сочетание встречается среди сторонников социал-демократических и лево-либеральных идей.';
+  else if(e<=38&&s>=62)result='Твои ответы сочетают рыночные экономические подходы с прогрессивными социальными ценностями. Похожие сочетания встречаются у сторонников разных либеральных направлений.';
+  else if(e<=38&&s<=38)result='Твои ответы сочетают рыночные экономические подходы с традиционными общественными ценностями. Похожие сочетания встречаются в экономически правых консервативных направлениях.';
+  else if(e>=62&&s<=38)result='Твои ответы соединяют поддержку экономического перераспределения и традиционные общественные ценности. Такое сочетание встречается у некоторых социально-консервативных и экономически левых движений.';
+  else result='По основным двум шкалам у тебя умеренное или смешанное сочетание позиций. Это нормально: политические взгляды не обязательно совпадают с одной готовой идеологией.';
+  if(l>=65)result+=' По вопросам личных свобод заметен акцент на индивидуальной автономии.';else if(l<=35)result+=' В вопросах свободы и безопасности чаще поддерживаются дополнительные ограничения ради порядка.';
+  if(g>=65)result+=' В вопросах власти выражена поддержка независимых институтов и системы сдержек.';else if(g<=35)result+=' В вопросах власти прослеживается предпочтение более централизованного управления.';
+  if(w>=65)result+=' Во внешней политике ответы чаще поддерживают сотрудничество между странами.';else if(w<=35)result+=' Во внешней политике ответы чаще поддерживают национальную самостоятельность и приоритет внутренних интересов.';
+  return result;
+}
+function renderResults(){if(answered()!==50){index=firstMissing();renderQuiz();return;}finished=true;persist();const scores=compute();const econ=scores.find(s=>s.id==='eco').score;const social=scores.find(s=>s.id==='soc').score;$('resultNarrative').textContent=narrative(scores);$('resultDot').style.left=econ+'%';$('resultDot').style.top=(100-social)+'%';$('resultCompass').setAttribute('aria-label',`Положение на карте: экономика ${econ} из 100, общественные ценности ${social} из 100`);
+  $('scoreList').replaceChildren(...scores.map(s=>{const div=document.createElement('div');div.className='score-item';const h=document.createElement('div');h.className='score-head';const strong=document.createElement('strong');strong.textContent=s.title;const count=document.createElement('b');count.innerHTML=`${s.score} <span>/ 100</span>`;h.append(strong,count);const rail=document.createElement('div');rail.className='score-rail';const marker=document.createElement('span');marker.className='score-marker';marker.style.left=s.score+'%';rail.append(marker);const labels=document.createElement('div');labels.className='score-ends';for(const label of [s.left,s.right]){const span=document.createElement('span');span.textContent=label;labels.append(span);}div.append(h,rail,labels);return div;}));
+  $('allAnswers').replaceChildren(...data.map(q=>{const el=document.createElement('div');el.className='detail-item';const num=document.createElement('span');num.className='di-num';num.textContent=String(q.id).padStart(2,'0');const block=document.createElement('div');const text=document.createElement('div');text.textContent=q.text;const ans=document.createElement('div');ans.className='di-answer';ans.textContent='Ответ: '+answerOptions.find(o=>o.v===answers[q.id]).t;block.append(text,ans);el.append(num,block);return el;}));show('results');}
+function getReport(){const scores=compute();return ['ПОЛЮС — ПОЛИТИЧЕСКИЙ ПРОФИЛЬ','',narrative(scores),'','ШКАЛЫ (0–100):',...scores.map(s=>`${s.title}: ${s.score}/100 (${s.left} — ${s.right})`),'','0 и 100 — противоположные полюса каждой шкалы; 50 — середина.','Это авторский ориентировочный опрос, не научная диагностика.'];}
+let toastTimeout=0;function toast(msg){const t=$('toast');t.textContent=msg;t.classList.remove('hidden');clearTimeout(toastTimeout);toastTimeout=setTimeout(()=>t.classList.add('hidden'),2500);}
+function restart(){if(answered()>0&&!window.confirm('Начать тест заново? Текущие ответы будут удалены.'))return;answers={};index=0;finished=false;persist();renderStart();}
+$('startBtn').addEventListener('click',()=>{if(finished&&answered()===50)renderResults();else{if(answers[data[index].id]!==undefined && answered()<50){const miss=firstMissing();if(index<miss)index=miss;}renderQuiz();}});
+$('newStartBtn').addEventListener('click',restart);$('prevBtn').addEventListener('click',back);$('nextBtn').addEventListener('click',next);$('restartBtn').addEventListener('click',restart);
+$('logoLink').addEventListener('click',e=>{e.preventDefault();renderStart();});
+$('copyBtn').addEventListener('click',async()=>{const text=getReport().join('\n');try{await navigator.clipboard.writeText(text);toast('Результат скопирован');}catch(e){const temp=document.createElement('textarea');temp.value=text;document.body.append(temp);temp.select();let okay=false;try{okay=document.execCommand('copy');}catch(err){}temp.remove();toast(okay?'Результат скопирован':'Копирование недоступно — используй скачивание');}});
+$('downloadBtn').addEventListener('click',()=>{const blob=new Blob([getReport().join('\n')],{type:'text/plain;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='polyus-result.txt';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);});
+document.addEventListener('keydown',e=>{if(screen!=='quiz'||e.altKey||e.ctrlKey||e.metaKey||e.target.closest('input,textarea'))return;if(/^[1-5]$/.test(e.key)){choose(answerOptions[Number(e.key)-1].v);}else if(e.key==='Enter'){e.preventDefault();next();}else if(e.key==='ArrowLeft'&&e.target.tagName!=='BUTTON'){back();}});
+// initialize
+if(finished)renderResults();else renderStart();
+</script>
+</body>
+</html>
