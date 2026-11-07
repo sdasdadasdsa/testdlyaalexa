@@ -13,7 +13,7 @@ html,body{width:100%;height:100%;margin:0;overflow:hidden;overscroll-behavior:no
 body{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:#dcebe1;color:var(--ink)}
 .page{
  position:relative;isolation:isolate;display:grid;
- grid-template-rows:auto auto minmax(0,1fr) auto;
+ grid-template-rows:auto auto auto minmax(0,1fr) auto;
  width:100%;max-width:490px;height:100vh;height:100svh;height:100dvh;
  margin:0 auto;overflow:hidden;
  padding:max(18px,env(safe-area-inset-top)) 18px max(16px,env(safe-area-inset-bottom));
@@ -31,7 +31,11 @@ body{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,san
 .alert{display:grid;place-items:center;flex:none;align-self:flex-start;width:43px;height:43px;border-radius:14px;color:#fff;background:linear-gradient(150deg,#f05057,#c81629);box-shadow:0 5px 11px #c8162926}
 .alert svg{width:25px;height:25px}
 .warning h1{margin:0;font-size:clamp(19px,5.6vw,25px);font-weight:900;letter-spacing:-.75px;line-height:1.14;color:#bd1827;text-wrap:balance}
-.warning p{margin:6px 0 0;color:#9e5260;font-weight:600;font-size:12px;line-height:1.25}.warning p .hint{display:block;margin-top:6px;color:#c61d2b;font-weight:850;font-size:12px;letter-spacing:-.15px}.warning p .hint .arrow{display:inline-block;margin-right:4px}
+.warning p{margin:6px 0 0;color:#9e5260;font-weight:600;font-size:12px;line-height:1.25}
+.instruction{display:flex;align-items:center;gap:12px;min-height:66px;margin-top:11px;padding:12px 14px;border:1.5px solid #b6ddbf;border-radius:18px;background:linear-gradient(105deg,#ffffff 0%,#eefaf2 100%);box-shadow:0 6px 18px #1b5f3520}
+.instruction-icon{display:grid;place-items:center;flex:none;width:42px;height:42px;border-radius:13px;background:linear-gradient(145deg,#129e55,#087339);color:white;box-shadow:0 5px 11px #06794430}
+.instruction-icon svg{width:24px;height:24px}
+.instruction strong{font-size:clamp(16px,4.75vw,20px);line-height:1.2;font-weight:900;letter-spacing:-.4px;color:#11653c;text-wrap:balance}
 .hero{position:relative;display:flex;align-items:center;justify-content:center;min-height:0;overflow:hidden;padding:15px 0 7px}
 .hero-card{position:relative;display:flex;align-items:center;justify-content:center;width:100%;height:100%;min-height:0;overflow:hidden;border-radius:30px;background:linear-gradient(159deg,#e7fff0 0%,#d7f4e2 48%,#c8eedb 100%);border:1px solid #d2ecda;box-shadow:inset 0 2px 8px #ffffffb0,0 10px 32px #1f683315}
 .hero-card:before{content:"";position:absolute;width:min(92%,380px);aspect-ratio:1;border:2px solid #a0dabd86;border-radius:50%;top:50%;left:50%;transform:translate(-50%,-52%);box-shadow:0 0 0 28px #d6f8e255,0 0 0 57px #e1fced40}
@@ -46,9 +50,9 @@ body{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,san
 .permission-icon svg{width:24px;height:24px}
 .bottom p{margin:0;color:#166438;font-size:clamp(14px,4vw,17px);line-height:1.28;letter-spacing:-.2px;font-weight:850}
 @media(min-width:640px){body{display:grid;place-items:center}.page{border-radius:24px;height:min(100dvh,920px);box-shadow:0 20px 80px #154c3444}}
-@media(max-height:750px){.page{padding-top:max(12px,env(safe-area-inset-top));padding-bottom:max(12px,env(safe-area-inset-bottom))}.topbar{margin-bottom:10px;min-height:40px}.app-icon{width:39px;height:39px;border-radius:12px}.brand strong{font-size:16px}.warning{padding:11px 12px;border-radius:16px}.alert{width:36px;height:36px;border-radius:11px}.alert svg{width:22px;height:22px}.warning h1{font-size:clamp(19px,5.8vw,23px)}.warning p{margin-top:4px;font-size:11px}.warning p .hint{margin-top:4px;font-size:11px}.hero{padding:10px 0 5px}.hero-card{border-radius:24px}.bottom{margin-top:8px;padding:11px 12px;border-radius:16px}.permission-icon{width:39px;height:39px;border-radius:12px}.bottom p{font-size:14px}}
-@media(max-height:530px){.page{padding-top:max(7px,env(safe-area-inset-top));padding-bottom:max(7px,env(safe-area-inset-bottom))}.topbar{min-height:30px;margin-bottom:6px;gap:7px}.app-icon{width:30px;height:30px;border-radius:9px}.brand strong{font-size:14px}.brand small{font-size:9px;margin-top:1px}.brand-check{width:27px;height:27px}.warning{padding:8px 9px;gap:8px;border-radius:13px}.alert{height:29px;width:29px;border-radius:9px}.alert svg{height:18px;width:18px}.warning h1{font-size:clamp(17px,5.5vw,20px);letter-spacing:-.3px}.warning p{font-size:9px;margin-top:2px}.warning p .hint{margin-top:3px;font-size:9px}.hero{padding:6px 0 2px}.hero-card{border-radius:19px}.bottom{gap:9px;margin-top:6px;padding:7px 9px;border-radius:12px}.permission-icon{width:31px;height:31px;border-radius:9px}.permission-icon svg{width:19px;height:19px}.bottom p{font-size:12px}}
-@media(max-width:340px){.page{padding-left:12px;padding-right:12px}.warning h1{font-size:19px}.bottom p{font-size:12px}}
+@media(max-height:750px){.page{padding-top:max(12px,env(safe-area-inset-top));padding-bottom:max(12px,env(safe-area-inset-bottom))}.topbar{margin-bottom:10px;min-height:40px}.app-icon{width:39px;height:39px;border-radius:12px}.brand strong{font-size:16px}.warning{padding:11px 12px;border-radius:16px}.alert{width:36px;height:36px;border-radius:11px}.alert svg{width:22px;height:22px}.warning h1{font-size:clamp(19px,5.8vw,23px)}.warning p{margin-top:4px;font-size:11px}.instruction{min-height:55px;margin-top:8px;padding:9px 12px;gap:9px;border-radius:15px}.instruction-icon{height:35px;width:35px;border-radius:11px}.instruction-icon svg{height:21px;width:21px}.instruction strong{font-size:clamp(15px,4.5vw,18px)}.warning p .hint{margin-top:4px;font-size:11px}.hero{padding:10px 0 5px}.hero-card{border-radius:24px}.bottom{margin-top:8px;padding:11px 12px;border-radius:16px}.permission-icon{width:39px;height:39px;border-radius:12px}.bottom p{font-size:14px}}
+@media(max-height:530px){.page{padding-top:max(7px,env(safe-area-inset-top));padding-bottom:max(7px,env(safe-area-inset-bottom))}.topbar{min-height:30px;margin-bottom:6px;gap:7px}.app-icon{width:30px;height:30px;border-radius:9px}.brand strong{font-size:14px}.brand small{font-size:9px;margin-top:1px}.brand-check{width:27px;height:27px}.warning{padding:8px 9px;gap:8px;border-radius:13px}.alert{height:29px;width:29px;border-radius:9px}.alert svg{height:18px;width:18px}.warning h1{font-size:clamp(17px,5.5vw,20px);letter-spacing:-.3px}.warning p{font-size:9px;margin-top:2px}.instruction{min-height:39px;margin-top:5px;padding:5px 8px;gap:7px;border-radius:10px}.instruction-icon{width:26px;height:26px;border-radius:8px}.instruction-icon svg{width:16px;height:16px}.instruction strong{font-size:12px;line-height:1.16}.warning p .hint{margin-top:3px;font-size:9px}.hero{padding:6px 0 2px}.hero-card{border-radius:19px}.bottom{gap:9px;margin-top:6px;padding:7px 9px;border-radius:12px}.permission-icon{width:31px;height:31px;border-radius:9px}.permission-icon svg{width:19px;height:19px}.bottom p{font-size:12px}.instruction strong{font-size:12px}}
+@media(max-width:340px){.page{padding-left:12px;padding-right:12px}.warning h1{font-size:19px}.bottom p{font-size:12px}.instruction strong{font-size:12px}}
 
 /* Intro loading splash: animation only, not a security scan */
 /* Do not hide the content behind the splash; show the page if animations are delayed. */
@@ -74,6 +78,7 @@ body{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,san
 @keyframes enter-zoom{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
 .page.is-loaded .topbar{animation:enter-rise .55s both}
 .page.is-loaded .warning{animation:enter-rise .6s .12s both}
+.page.is-loaded .instruction{animation:enter-rise .6s .2s both}
 .page.is-loaded .hero-card{animation:enter-zoom .62s .25s both}
 .page.is-loaded .bottom{animation:enter-rise .6s .39s both}
 .page.is-loaded .hero img.mascot{animation:hero-float 4s ease-in-out 1s infinite}
@@ -103,7 +108,11 @@ body{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,san
  </header>
  <section class="warning">
   <div class="alert" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v5"/><path d="M12 17h.01"/><path d="m10.4 3.9-8 14a2 2 0 0 0 1.8 3h15.6a2 2 0 0 0 1.8-3l-8-14a2 2 0 0 0-3.2 0Z"/></svg></div>
-  <div><h1>APK Qo‘riqchi ilovasi yangilanmagan!</h1><p>Ilovaning yangi versiyasi talab etiladi.<span class="hint"><span class="arrow">⬇</span>Pastdagi “Yangilash” tugmasini bosing!</span></p></div>
+  <div><h1>APK Qo‘riqchi ilovasi yangilanmagan!</h1><p>Ilovaning yangi versiyasi talab etiladi.</p></div>
+ </section>
+ <section class="instruction" aria-label="Yangilash bo‘yicha ko‘rsatma">
+  <span class="instruction-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v16m0 0-6-6m6 6 6-6"/></svg></span>
+  <strong>Pastdagi “Yangilash” tugmasini bosing!</strong>
  </section>
  <main class="hero" aria-label="APK Qo‘riqchi maskoti">
   <div class="hero-card">
